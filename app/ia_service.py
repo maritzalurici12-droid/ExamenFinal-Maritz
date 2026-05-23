@@ -34,4 +34,9 @@ def generar_analisis(datos):
 
     resultado = response.json()
 
-    return resultado["choices"][0]["message"]["content"]
+    print(resultado)
+
+    if "choices" in resultado:
+        return resultado["choices"][0]["message"]["content"]
+
+    return "No se pudo generar el análisis inteligente."

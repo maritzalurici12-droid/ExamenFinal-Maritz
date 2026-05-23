@@ -6,6 +6,7 @@ from flask import render_template
 from flask_appbuilder import BaseView, expose
 from sqlalchemy import func
 from datetime import date
+from .ia_service import generar_analisis
 
 class ClienteView(ModelView):
     datamodel = SQLAInterface(Cliente)
@@ -143,13 +144,25 @@ class DashboardView(BaseView):
         labels = [s[0] for s in servicios]
         valores = [s[1] for s in servicios]
 
+        datos_ia = f"""
+        Total de clientes: {total_clientes}
+        Total de órdenes: {total_ordenes}
+        Ingresos totales: {ingresos}
+
+        Servicios:
+        {servicios}
+        """
+
+        analisis_ia = generar_analisis(datos_ia)
+
         return self.render_template(
             "dashboard/dashboard.html",
             total_clientes=total_clientes,
             total_ordenes=total_ordenes,
             ingresos=ingresos,
             labels=labels,
-            valores=valores
+            valores=valores,
+            analisis_ia=analisis_ia
         )
 
 appbuilder.add_view(
