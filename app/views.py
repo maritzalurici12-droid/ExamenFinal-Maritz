@@ -18,6 +18,11 @@ class ClienteView(ModelView):
         "correo",
         "direccion"
     ]
+    base_permissions = [
+    "can_list",
+    "can_show",
+    "can_add"
+]
 class ServicioView(ModelView):
     datamodel = SQLAInterface(Servicio)
 
@@ -26,6 +31,10 @@ class ServicioView(ModelView):
         "descripcion",
         "precio"
     ]
+    base_permissions = [
+    "can_list",
+    "can_show"
+]
 class TecnicoView(ModelView):
     datamodel = SQLAInterface(Tecnico)
 
@@ -34,6 +43,10 @@ class TecnicoView(ModelView):
         "especialidad",
         "telefono"
     ]
+    base_permissions = [
+    "can_list",
+    "can_show"
+]
 class OrdenServicioView(ModelView):
     datamodel = SQLAInterface(OrdenServicio)
 
@@ -63,6 +76,11 @@ class OrdenServicioView(ModelView):
     "fecha",
     "estado",
     "costo"
+]
+    base_permissions = [
+    "can_list",
+    "can_show",
+    "can_add"
 ]
 
     def pre_add(self, item):
