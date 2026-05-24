@@ -1,0 +1,115 @@
+{% extends "appbuilder/base.html" %}
+
+{% block content %}
+
+<style>
+
+.report-container{
+    padding:20px;
+    color:white;
+}
+
+.cards{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.card-box{
+    background:rgba(15,15,15,0.92);
+    padding:25px;
+    border-radius:20px;
+    width:100%;
+    margin-bottom:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.35);
+}
+
+h1,h2{
+    color:white;
+}
+
+canvas{
+    margin-top:20px;
+}
+
+.ia-box{
+    background:rgba(15,15,15,0.92);
+    padding:25px;
+    border-radius:20px;
+    line-height:1.8;
+    color:#ddd;
+}
+
+</style>
+
+<div class="report-container">
+
+    <h1>Reporte de Tendencias</h1>
+
+    <div class="card-box">
+
+        <h2>Clientes Frecuentes</h2>
+
+        <canvas id="clientesChart"></canvas>
+
+    </div>
+
+    <div class="card-box">
+
+        <h2>Servicios Más Utilizados</h2>
+
+        <canvas id="serviciosChart"></canvas>
+
+    </div>
+
+    <div class="ia-box">
+
+        <h2>Análisis Inteligente IA</h2>
+
+        <p>{{ analisis_ia }}</p>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+new Chart(document.getElementById('clientesChart'), {
+
+    type:'bar',
+
+    data:{
+        labels: {{ clientes_labels | tojson }},
+        datasets:[{
+            label:'Órdenes',
+            data: {{ clientes_valores | tojson }},
+            backgroundColor:'#ff6b00'
+        }]
+    }
+
+});
+
+new Chart(document.getElementById('serviciosChart'), {
+
+    type:'pie',
+
+    data:{
+        labels: {{ servicios_labels | tojson }},
+        datasets:[{
+            data: {{ servicios_valores | tojson }},
+            backgroundColor:[
+                '#ff6b00',
+                '#ffd000',
+                '#ff3c00',
+                '#888'
+            ]
+        }]
+    }
+
+});
+
+</script>
+
+{% endblock %}

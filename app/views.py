@@ -7,6 +7,7 @@ from flask_appbuilder import BaseView, expose
 from sqlalchemy import func
 from datetime import date
 from .ia_service import generar_analisis
+from sqlalchemy import desc
 
 class ClienteView(ModelView):
     datamodel = SQLAInterface(Cliente)
@@ -165,9 +166,68 @@ class DashboardView(BaseView):
             analisis_ia=analisis_ia
         )
 
+class TendenciasView(BaseView):
+
+    default_view = "index"
+
+    route_base = "/tendencias"
+
+    @expose("/")
+
+    def index(self):
+
+        clientes = db.session.query(
+            Cliente.nombre,
+            func.count(OrdenServicio.id)
+        ).join(
+            OrdenServicio
+        ).group_by(
+            Cliente.nombre
+        ).order_by(
+            desc(func.count(OrdenServicio.id))
+        ).all()
+
+        servicios = db.session.query(
+            Servicio.nombre,
+            func.count(OrdenServicio.id)
+        ).join(
+            OrdenServicio
+        ).group_by(
+            Servicio.nombre
+        ).all()
+
+        clientes_labels = [c[0] for c in clientes]
+        clientes_valores = [c[1] for c in clientes]
+
+        servicios_labels = [s[0] for s in servicios]
+        servicios_valores = [s[1] for s in servicios]
+
+        datos_ia = f"""
+        Clientes frecuentes: {clientes}
+        Servicios más utilizados: {servicios}
+        """
+
+        analisis_ia = generar_analisis(datos_ia)
+
+        return self.render_template(
+            "reportes/tendencias.html",
+            clientes_labels=clientes_labels,
+            clientes_valores=clientes_valores,
+            servicios_labels=servicios_labels,
+            servicios_valores=servicios_valores,
+            analisis_ia=analisis_ia
+        )
+    
 appbuilder.add_view(
     DashboardView,
     "Dashboard",
     icon="fa-chart-bar",
+    category="Reportes"
+)
+
+appbuilder.add_view(
+    TendenciasView,
+    "Tendencias",
+    icon="fa-chart-line",
     category="Reportes"
 )
