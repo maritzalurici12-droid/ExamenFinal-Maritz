@@ -1,172 +1,141 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "appbuilder/base.html" %}
 
-<head>
+{% block content %}
 
-    <meta charset="UTF-8">
+<style>
 
-    <title>ServiTech Manager Dashboard</title>
+.dashboard-container{
+    padding:20px;
+    color:white;
+}
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+/* titulo */
+.dashboard-title{
+    margin-bottom:30px;
+}
 
-    <style>
+.dashboard-title h1{
+    color:white;
+    font-size:42px;
+    font-weight:bold;
+}
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-        }
+.dashboard-title p{
+    color:#bbb;
+    font-size:18px;
+}
 
-        body{
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background:#eef2f7;
-            padding:40px;
-            color:#1e293b;
-        }
+/* cards */
+.cards{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-bottom:30px;
+}
 
-        .titulo{
-            margin-bottom:35px;
-        }
+.card-box{
+    background:rgba(15,15,15,0.92);
+    border:1px solid rgba(255,255,255,0.08);
 
-        .titulo h1{
-            font-size:40px;
-            color:#0f172a;
-            margin-bottom:10px;
-        }
+    width:260px;
 
-        .titulo p{
-            color:#64748b;
-            font-size:18px;
-        }
+    padding:25px;
 
-        .cards{
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-            gap:25px;
-            margin-bottom:40px;
-        }
+    border-radius:20px;
 
-        .card{
-            background:white;
-            padding:30px;
-            border-radius:20px;
-            box-shadow:0px 8px 20px rgba(0,0,0,0.08);
-            transition:0.3s;
-            position:relative;
-            overflow:hidden;
-        }
+    box-shadow:0 10px 25px rgba(0,0,0,0.35);
 
-        .card:hover{
-            transform:translateY(-6px);
-        }
+    transition:0.3s;
+}
 
-        .card::before{
-            content:"";
-            position:absolute;
-            top:0;
-            left:0;
-            width:100%;
-            height:6px;
-        }
+.card-box:hover{
+    transform:translateY(-5px);
+}
 
-        .clientes::before{
-            background:#3b82f6;
-        }
+.card-box h2{
+    color:#ccc;
+    font-size:18px;
+}
 
-        .ordenes::before{
-            background:#10b981;
-        }
+.card-box h1{
+    color:white;
+    font-size:42px;
+    margin-top:10px;
+}
 
-        .ingresos::before{
-            background:#f59e0b;
-        }
+.card-box p{
+    color:#ff6b00;
+}
 
-        .card h2{
-            font-size:18px;
-            color:#64748b;
-            margin-bottom:15px;
-        }
+/* grafico */
+.chart-box{
+    background:rgba(15,15,15,0.92);
 
-        .card h3{
-            font-size:38px;
-            color:#0f172a;
-        }
+    border-radius:20px;
 
-        .panel{
-            background:white;
-            border-radius:20px;
-            padding:35px;
-            box-shadow:0px 8px 20px rgba(0,0,0,0.08);
-            margin-bottom:35px;
-        }
+    padding:25px;
 
-        .panel h2{
-            margin-bottom:25px;
-            color:#0f172a;
-        }
+    margin-top:20px;
 
-        .ia-panel{
-            background:linear-gradient(135deg,#0f172a,#1e3a8a);
-            color:white;
-        }
+    box-shadow:0 10px 25px rgba(0,0,0,0.35);
+}
 
-        .ia-panel h2{
-            color:white;
-        }
+.chart-box h2{
+    color:white;
+    margin-bottom:20px;
+}
 
-        .ia-texto{
-            line-height:1.9;
-            font-size:17px;
-            color:#e2e8f0;
-        }
+canvas{
+    background:transparent !important;
+}
 
-        canvas{
-            max-height:400px;
-        }
+</style>
 
-    </style>
+<div class="dashboard-container">
 
-</head>
+    <div class="dashboard-title">
 
-<body>
+        <h1>Dashboard</h1>
 
-    <div class="titulo">
-
-        <h1>ServiTech Manager</h1>
-
-        <p>Panel inteligente de análisis y reportes</p>
+        <p>Resumen general del sistema</p>
 
     </div>
 
     <div class="cards">
 
-        <div class="card clientes">
+        <div class="card-box">
 
-            <h2>Total Clientes</h2>
+            <h2>Clientes</h2>
 
-            <h3>{{ total_clientes }}</h3>
+            <h1>{{ total_clientes }}</h1>
 
-        </div>
-
-        <div class="card ordenes">
-
-            <h2>Total Órdenes</h2>
-
-            <h3>{{ total_ordenes }}</h3>
+            <p>Total registrados</p>
 
         </div>
 
-        <div class="card ingresos">
+        <div class="card-box">
 
-            <h2>Ingresos Totales</h2>
+            <h2>Órdenes</h2>
 
-            <h3>Bs {{ ingresos }}</h3>
+            <h1>{{ total_ordenes }}</h1>
+
+            <p>Total registradas</p>
+
+        </div>
+
+        <div class="card-box">
+
+            <h2>Ingresos</h2>
+
+            <h1>Bs {{ ingresos }}</h1>
+
+            <p>Ingresos totales</p>
 
         </div>
 
     </div>
 
-    <div class="panel">
+    <div class="chart-box">
 
         <h2>Servicios Más Solicitados</h2>
 
@@ -174,71 +143,87 @@
 
     </div>
 
-    <div class="panel ia-panel">
+</div>
+<div class="chart-box" style="margin-top:30px;">
 
-        <h2>Análisis Inteligente</h2>
+    <h2>Análisis Inteligente IA</h2>
 
-        <div class="ia-texto">
+    <div style="
+        background:rgba(255,255,255,0.03);
+        padding:20px;
+        border-radius:15px;
+        color:#ddd;
+        line-height:1.8;
+        font-size:16px;
+    ">
 
-            {{ analisis_ia }}
-
-        </div>
+        {{ analisis_ia }}
 
     </div>
 
-    <script>
+</div>
 
-        const ctx = document.getElementById('grafica');
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: {{ labels | tojson }},
-                datasets: [{
-                    label: 'Cantidad de Servicios',
-                    data: {{ valores | tojson }},
-                    backgroundColor: [
-                        '#3b82f6',
-                        '#10b981',
-                        '#f59e0b',
-                        '#ef4444',
-                        '#8b5cf6'
-                    ],
-                    borderRadius: 8,
-                    borderWidth: 1
-                }]
-            },
+<script>
 
-            options: {
-                responsive:true,
+const ctx = document.getElementById('grafica');
 
-                plugins: {
-                    legend: {
-                        labels: {
-                            color:'#1e293b'
-                        }
-                    }
-                },
+new Chart(ctx, {
 
-                scales: {
-                    y: {
-                        beginAtZero:true,
-                        ticks:{
-                            color:'#64748b'
-                        }
-                    },
+    type:'bar',
 
-                    x: {
-                        ticks:{
-                            color:'#64748b'
-                        }
-                    }
+    data:{
+
+        labels: {{ labels | tojson }},
+
+        datasets:[{
+
+            label:'Cantidad',
+
+            data: {{ valores | tojson }},
+
+            backgroundColor:'#ff6b00',
+
+            borderRadius:10
+
+        }]
+
+    },
+
+    options:{
+
+        responsive:true,
+
+        plugins:{
+            legend:{
+                labels:{
+                    color:'white'
                 }
             }
-        });
+        },
 
-    </script>
+        scales:{
 
-</body>
+            y:{
+                ticks:{
+                    color:'white'
+                },
+                beginAtZero:true
+            },
 
-</html>
+            x:{
+                ticks:{
+                    color:'white'
+                }
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+{% endblock %}
