@@ -217,7 +217,67 @@ class TendenciasView(BaseView):
             servicios_valores=servicios_valores,
             analisis_ia=analisis_ia
         )
-    
+
+class RecomendacionesView(BaseView):
+
+    default_view = "index"
+
+    route_base = "/recomendaciones"
+
+    @expose("/")
+
+    def index(self):
+
+        total_ordenes = db.session.query(
+            func.count(OrdenServicio.id)
+        ).scalar()
+
+        ingresos = db.session.query(
+            func.sum(OrdenServicio.costo)
+        ).scalar()
+
+        servicio_top = db.session.query(
+            Servicio.nombre,
+            func.count(OrdenServicio.id)
+        ).join(
+            OrdenServicio
+        ).group_by(
+            Servicio.nombre
+        ).order_by(
+            desc(func.count(OrdenServicio.id))
+        ).first()
+
+        tecnico_top = db.session.query(
+            Tecnico.nombre,
+            func.count(OrdenServicio.id)
+        ).join(
+            OrdenServicio
+        ).group_by(
+            Tecnico.nombre
+        ).order_by(
+            desc(func.count(OrdenServicio.id))
+        ).first()
+
+        datos_ia = f"""
+        Total de órdenes: {total_ordenes}
+        Ingresos totales: {ingresos}
+        Servicio más solicitado: {servicio_top}
+        Técnico con más carga: {tecnico_top}
+
+        Genera recomendaciones para mejorar el negocio,
+        optimizar servicios y aumentar ingresos.
+        """
+
+        analisis_ia = generar_analisis(datos_ia)
+
+        return self.render_template(
+            "reportes/recomendaciones.html",
+            total_ordenes=total_ordenes,
+            ingresos=ingresos,
+            servicio_top=servicio_top,
+            tecnico_top=tecnico_top,
+            analisis_ia=analisis_ia
+        )
 appbuilder.add_view(
     DashboardView,
     "Dashboard",
@@ -229,5 +289,11 @@ appbuilder.add_view(
     TendenciasView,
     "Tendencias",
     icon="fa-chart-line",
+    category="Reportes"
+)
+appbuilder.add_view(
+    RecomendacionesView,
+    "Recomendaciones IA",
+    icon="fa-robot",
     category="Reportes"
 )
