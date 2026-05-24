@@ -1,0 +1,133 @@
+{% extends "appbuilder/baselayout.html" %}
+
+{% block head_css %}
+{{ super() }}
+
+<style>
+
+body{
+    background:
+    linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.85)),
+    url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1974&auto=format&fit=crop');
+    background-size:cover;
+    background-position:center;
+    height:100vh;
+    overflow:hidden;
+    font-family:'Segoe UI',sans-serif;
+}
+
+.navbar,
+footer{
+    display:none !important;
+}
+
+.container{
+    width:100% !important;
+    height:100vh !important;
+    display:flex !important;
+    justify-content:center !important;
+    align-items:center !important;
+}
+
+/* logo */
+.logo{
+    position:absolute;
+    top:25px;
+    left:35px;
+    color:#ffd000;
+    font-size:40px;
+    font-weight:bold;
+}
+
+/* imagen */
+.tech{
+    position:absolute;
+    top:20px;
+    right:30px;
+    width:90px;
+}
+
+/* login */
+.login-box{
+    width:430px;
+    background:rgba(25,25,25,0.95);
+    padding:50px;
+    border-radius:30px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.6);
+}
+
+/* titulo */
+.login-title{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.login-title h1{
+    color:white;
+    font-size:42px;
+}
+
+.login-title p{
+    color:#bbb;
+}
+
+/* inputs */
+.form-control{
+    background:#2c2c2c !important;
+    border:none !important;
+    border-radius:15px !important;
+    padding:15px !important;
+    color:white !important;
+    margin-bottom:20px;
+}
+
+/* focus */
+.form-control:focus{
+    border:2px solid #ff3c00 !important;
+    box-shadow:none !important;
+    transform:scale(1.02);
+}
+
+/* boton */
+.btn-primary{
+    width:100%;
+    padding:15px !important;
+    border:none !important;
+    border-radius:15px !important;
+    background:linear-gradient(90deg,#ff3c00,#ff8800) !important;
+    font-size:17px !important;
+}
+
+.btn-primary:hover{
+    transform:scale(1.03);
+}
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="logo">
+    ServiTech Manager
+</div>
+
+<img
+class="tech"
+src="https://cdn-icons-png.flaticon.com/512/1055/1055687.png">
+
+<div class="login-box">
+
+    <div class="login-title">
+
+        <h1>Bienvenido</h1>
+
+        <p>Inicia sesión para continuar</p>
+
+    </div>
+
+    {{ super() }}
+
+</div>
+
+{% endblock %}

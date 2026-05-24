@@ -1,76 +1,127 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
+
 <head>
-    <title>Dashboard Inteligente</title>
+
+    <meta charset="UTF-8">
+
+    <title>ServiTech Manager Dashboard</title>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
 
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
         body{
-            font-family: Arial;
-            background:#f4f6f9;
-            padding:30px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:#eef2f7;
+            padding:40px;
+            color:#1e293b;
         }
 
-        h1{
-            color:#333;
+        .titulo{
+            margin-bottom:35px;
         }
 
-        .container{
-            display:flex;
-            flex-wrap:wrap;
-            gap:20px;
-            margin-bottom:30px;
+        .titulo h1{
+            font-size:40px;
+            color:#0f172a;
+            margin-bottom:10px;
+        }
+
+        .titulo p{
+            color:#64748b;
+            font-size:18px;
+        }
+
+        .cards{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+            gap:25px;
+            margin-bottom:40px;
         }
 
         .card{
             background:white;
-            padding:25px;
-            border-radius:15px;
-            width:250px;
-            box-shadow:0px 4px 10px rgba(0,0,0,0.1);
+            padding:30px;
+            border-radius:20px;
+            box-shadow:0px 8px 20px rgba(0,0,0,0.08);
             transition:0.3s;
+            position:relative;
+            overflow:hidden;
         }
 
         .card:hover{
-            transform:translateY(-5px);
+            transform:translateY(-6px);
+        }
+
+        .card::before{
+            content:"";
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:6px;
+        }
+
+        .clientes::before{
+            background:#3b82f6;
+        }
+
+        .ordenes::before{
+            background:#10b981;
+        }
+
+        .ingresos::before{
+            background:#f59e0b;
         }
 
         .card h2{
-            margin:0;
-            color:#666;
+            font-size:18px;
+            color:#64748b;
+            margin-bottom:15px;
         }
 
         .card h3{
-            font-size:32px;
-            color:#111;
+            font-size:38px;
+            color:#0f172a;
         }
 
-        .grafica-container{
+        .panel{
             background:white;
-            padding:30px;
-            border-radius:15px;
-            box-shadow:0px 4px 10px rgba(0,0,0,0.1);
-            margin-bottom:30px;
+            border-radius:20px;
+            padding:35px;
+            box-shadow:0px 8px 20px rgba(0,0,0,0.08);
+            margin-bottom:35px;
         }
 
-        .ia-container{
-            background:#111827;
+        .panel h2{
+            margin-bottom:25px;
+            color:#0f172a;
+        }
+
+        .ia-panel{
+            background:linear-gradient(135deg,#0f172a,#1e3a8a);
             color:white;
-            padding:30px;
-            border-radius:15px;
-            box-shadow:0px 4px 10px rgba(0,0,0,0.2);
         }
 
-        .ia-container h2{
-            color:#60a5fa;
+        .ia-panel h2{
+            color:white;
         }
 
         .ia-texto{
-            margin-top:15px;
-            line-height:1.8;
-            font-size:16px;
+            line-height:1.9;
+            font-size:17px;
+            color:#e2e8f0;
+        }
+
+        canvas{
+            max-height:400px;
         }
 
     </style>
@@ -79,41 +130,58 @@
 
 <body>
 
-    <h1>📊 Dashboard Inteligente - ServiTech Manager</h1>
+    <div class="titulo">
 
-    <div class="container">
+        <h1>ServiTech Manager</h1>
 
-        <div class="card">
+        <p>Panel inteligente de análisis y reportes</p>
+
+    </div>
+
+    <div class="cards">
+
+        <div class="card clientes">
+
             <h2>Total Clientes</h2>
+
             <h3>{{ total_clientes }}</h3>
+
         </div>
 
-        <div class="card">
+        <div class="card ordenes">
+
             <h2>Total Órdenes</h2>
+
             <h3>{{ total_ordenes }}</h3>
+
         </div>
 
-        <div class="card">
+        <div class="card ingresos">
+
             <h2>Ingresos Totales</h2>
+
             <h3>Bs {{ ingresos }}</h3>
+
         </div>
 
     </div>
 
-    <div class="grafica-container">
+    <div class="panel">
 
-        <h2>📈 Servicios Más Solicitados</h2>
+        <h2>Servicios Más Solicitados</h2>
 
         <canvas id="grafica"></canvas>
 
     </div>
 
-    <div class="ia-container">
+    <div class="panel ia-panel">
 
-        <h2>🤖 Análisis Inteligente con IA</h2>
+        <h2>Análisis Inteligente</h2>
 
         <div class="ia-texto">
+
             {{ analisis_ia }}
+
         </div>
 
     </div>
@@ -127,16 +195,43 @@
             data: {
                 labels: {{ labels | tojson }},
                 datasets: [{
-                    label: 'Cantidad de servicios',
+                    label: 'Cantidad de Servicios',
                     data: {{ valores | tojson }},
-                    borderWidth:  1
+                    backgroundColor: [
+                        '#3b82f6',
+                        '#10b981',
+                        '#f59e0b',
+                        '#ef4444',
+                        '#8b5cf6'
+                    ],
+                    borderRadius: 8,
+                    borderWidth: 1
                 }]
             },
+
             options: {
                 responsive:true,
+
+                plugins: {
+                    legend: {
+                        labels: {
+                            color:'#1e293b'
+                        }
+                    }
+                },
+
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero:true,
+                        ticks:{
+                            color:'#64748b'
+                        }
+                    },
+
+                    x: {
+                        ticks:{
+                            color:'#64748b'
+                        }
                     }
                 }
             }
@@ -145,4 +240,5 @@
     </script>
 
 </body>
+
 </html>

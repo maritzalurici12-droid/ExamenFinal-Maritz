@@ -109,3 +109,10 @@ IMG_UPLOAD_URL = "/static/uploads/"
 # APP_THEME = "spacelab.css"
 # APP_THEME = "united.css"
 # APP_THEME = "yeti.css"
+APP_NAME = "ServiTech Manager"
+
+APP_ICON = "fa-cogs"
+
+APP_THEME = "cyborg.css"
+
+APP_CSS = ["/static/css/custom.css"]
